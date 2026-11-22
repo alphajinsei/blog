@@ -1,0 +1,25 @@
+---
+import Base from '../../layouts/Base.astro';
+import Tag from '../../components/Tag.astro';
+import { getPosts, tagCounts } from '../../lib/posts';
+import { DOMAINS, DOMAIN_ORDER, domainOf } from '../../lib/tags';
+
+const posts = await getPosts();
+const counts = tagCounts(posts);
+const groups = DOMAIN_ORDER
+  .map((d) => ({ d, tags: counts.filter((c) => domainOf(c.tag) === d) }))
+  .filter((g) => g.tags.length > 0);
+---
+
+<Base title="タグ" nav="tags">
+  <h1 class="page-title">タグ</h1>
+  {groups.length === 0 && <p class="empty">まだタグがありません。</p>}
+  <div class="stack">
+    {groups.map(({ d, tags }) => (
+      <section class="domain">
+        <h2>{DOMAINS[d].label}</h2>
+        <div class="tags">{tags.map(({ tag, count }) => <Tag tag={tag} count={count} />)}</div>
+      </section>
+    ))}
+  </div>
+</Base>

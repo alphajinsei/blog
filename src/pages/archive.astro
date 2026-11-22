@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro';
+import PostRows from '../components/PostRows.astro';
+import { getPosts, groupBy, ym, ymLabel } from '../lib/posts';
+
+const posts = await getPosts();
+const byMonth = groupBy(posts, (p) => ym(p.data.date));
+---
+
+<Base title="月別" nav="archive">
+  <h1 class="page-title">月別</h1>
+  {posts.length === 0 && <p class="empty">まだ記事がありません。</p>}
+  <ul class="months">
+    {byMonth.map(([k, items]) => (
+      <li><a href={`#m-${k}`}>{ymLabel(k)}</a><span class="n">{items.length}</span></li>
+    ))}
+  </ul>
+  <div class="stack">
+    {byMonth.map(([k, items]) => (
+      <section class="group" id={`m-${k}`}>
+        <h2>{ymLabel(k)}</h2>
+        <PostRows posts={items} />
+      </section>
+    ))}
+  </div>
+</Base>

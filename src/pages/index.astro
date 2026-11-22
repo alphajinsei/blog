@@ -1,0 +1,30 @@
+---
+import Base from '../layouts/Base.astro';
+import PostRows from '../components/PostRows.astro';
+import Tag from '../components/Tag.astro';
+import { getPosts, groupBy, year, tagCounts } from '../lib/posts';
+
+const posts = await getPosts();
+const byYear = groupBy(posts, (p) => year(p.data.date));
+// 最近のタグ：新しい10本の記事に付いたタグ。
+const recentTags = tagCounts(posts.slice(0, 10)).slice(0, 12);
+---
+
+<Base>
+  <div class="stack">
+    {recentTags.length > 0 && (
+      <section>
+        <h2 class="section-label">最近のタグ</h2>
+        <div class="tags">{recentTags.map(({ tag, count }) => <Tag tag={tag} count={count} />)}</div>
+        <p class="more"><a href="/tags/">すべてのタグ</a></p>
+      </section>
+    )}
+    {posts.length === 0 && <p class="empty">まだ記事がありません。</p>}
+    {byYear.map(([y, items]) => (
+      <section class="group">
+        <h2>{y}</h2>
+        <PostRows posts={items} />
+      </section>
+    ))}
+  </div>
+</Base>

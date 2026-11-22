@@ -1,0 +1,131 @@
+/* テーマ「鉛」：青みのある薄い灰色の地に、藍のアクセント。ダークモードは作らない。 */
+:root {
+  --bg: #f1f3f5;
+  --fg: #1c2027;
+  --sub: #586069;
+  --line: #dde1e6;
+  --accent: #2c4f86;
+  --chip: #ffffff;
+  --code-bg: #ffffff;
+  --sans: "Noto Sans JP", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", Meiryo, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  /* 本文の幅（左右の余白 24px ずつを含む）。1行は40字台に収まる。 */
+  --w: 768px;
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.9;
+  -webkit-font-smoothing: antialiased;
+  /* 記事が短いページでも、フッターを画面の下に置く */
+  min-height: 100vh; display: flex; flex-direction: column;
+}
+a { color: var(--accent); }
+h1, h2, h3, h4 { text-wrap: balance; }
+
+/* ---------- 枠 ---------- */
+/* フッターと同じく、横幅いっぱいに線を引く */
+.site-header { border-bottom: 1px solid var(--line); }
+.site-header .inner {
+  max-width: var(--w); margin: 0 auto; padding: 18px 24px;
+  display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 20px;
+}
+.site-name { font-weight: 700; font-size: 1.05rem; color: var(--accent); text-decoration: none; }
+.site-nav { display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: .88rem; }
+.site-nav a { color: var(--sub); text-decoration: none; }
+.site-nav a:hover, .site-nav a[aria-current="page"] { color: var(--fg); }
+main { flex: 1; width: 100%; max-width: var(--w); margin: 0 auto; padding: 28px 24px 56px; }
+.site-footer { border-top: 1px solid var(--line); }
+.site-footer .inner {
+  max-width: var(--w); margin: 0 auto; padding: 18px 24px 28px;
+  display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: .82rem; color: var(--sub);
+}
+.site-footer a { color: var(--sub); }
+@media (max-width: 560px) {
+  .site-header .inner, main, .site-footer .inner { padding-left: 16px; padding-right: 16px; }
+}
+
+/* ---------- 一覧 ---------- */
+.section-label { font-size: .8rem; font-weight: 500; color: var(--sub); letter-spacing: .06em; margin: 0 0 10px; }
+.page-title { font-size: 1.4rem; font-weight: 700; margin: 0 0 20px; line-height: 1.5; }
+.stack { display: grid; gap: 28px; }
+.group h2 { margin: 0 0 4px; font-size: .95rem; font-weight: 700; }
+.rows { list-style: none; margin: 0; padding: 0; }
+.row {
+  display: grid; grid-template-columns: 3.4em minmax(0, 1fr) auto; align-items: center;
+  gap: 4px 16px; padding-block: 9px; border-top: 1px solid var(--line);
+}
+.row .date { font-size: .8rem; color: var(--sub); font-variant-numeric: tabular-nums; }
+.row .t { font-size: .98rem; font-weight: 500; line-height: 1.55; color: var(--fg); text-decoration: none; }
+.row .t:hover { color: var(--accent); text-decoration: underline; }
+.row.wide { grid-template-columns: 6.4em minmax(0, 1fr) auto; }
+@media (max-width: 620px) {
+  .row, .row.wide { grid-template-columns: 3.4em minmax(0, 1fr); }
+  .row.wide { grid-template-columns: 6.4em minmax(0, 1fr); }
+  .row .tags { grid-column: 2; }
+}
+.empty { color: var(--sub); }
+.more { font-size: .86rem; margin-top: 10px; }
+.more a { color: var(--sub); }
+
+/* ---------- タグ ---------- */
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag {
+  font-size: .74rem; line-height: 1; padding: 5px 8px 5px 7px; border-radius: 4px; white-space: nowrap;
+  /* 小札の地と枠にも分野の色をうすく混ぜて、点だけより見分けやすくする。文字は濃いまま。 */
+  background: color-mix(in srgb, var(--dot) 9%, #fff);
+  border: 1px solid color-mix(in srgb, var(--dot) 30%, #fff);
+  color: var(--fg);
+  display: inline-flex; align-items: center; gap: 5px; text-decoration: none;
+}
+.tag::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--dot); flex: none; }
+.tag:hover { border-color: var(--dot); }
+.tag .n { color: var(--sub); font-variant-numeric: tabular-nums; }
+.domain { display: grid; gap: 8px; }
+.domain h2 { margin: 0; font-size: .85rem; font-weight: 500; color: var(--sub); }
+
+/* ---------- 月別 ---------- */
+.months { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: .88rem; margin: 0 0 28px; padding: 0; list-style: none; }
+.months a { color: var(--fg); }
+.months .n { color: var(--sub); margin-left: 3px; font-variant-numeric: tabular-nums; }
+
+/* ---------- 記事 ---------- */
+.post { display: grid; gap: 26px; }
+.post-head { display: grid; gap: 12px; }
+.post-head h1 { margin: 0; font-size: 1.6rem; font-weight: 700; line-height: 1.45; }
+.post-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; }
+.post-meta .date { font-size: .82rem; color: var(--sub); font-variant-numeric: tabular-nums; }
+.post-after { display: grid; gap: 16px; border-top: 1px solid var(--line); padding-top: 18px; }
+.related { display: grid; gap: 4px; font-size: .92rem; }
+.related .section-label { margin: 0 0 2px; }
+.related a { text-decoration: none; }
+.related a:hover { text-decoration: underline; }
+.history { margin: 0; font-size: .84rem; color: var(--sub); }
+
+/* 本文（Markdown） */
+.prose { font-size: 1.02rem; line-height: 2; overflow-wrap: anywhere; }
+.prose > * { margin: 0 0 1.2em; }
+.prose > :last-child { margin-bottom: 0; }
+.prose h2 { font-size: 1.25rem; font-weight: 700; line-height: 1.5; margin: 2em 0 .6em; }
+.prose h3 { font-size: 1.08rem; font-weight: 700; line-height: 1.5; margin: 1.6em 0 .4em; }
+.prose h4 { font-size: 1rem; font-weight: 700; margin: 1.4em 0 .3em; }
+.prose ul, .prose ol { padding-left: 1.4em; }
+.prose li { margin: .2em 0; }
+.prose li > ul, .prose li > ol { margin: .2em 0; }
+.prose blockquote { margin-left: 0; padding: .2em 0 .2em 1em; border-left: 3px solid var(--line); color: var(--sub); }
+.prose hr { border: 0; border-top: 1px solid var(--line); margin: 2em 0; }
+.prose img { max-width: 100%; height: auto; border-radius: 4px; }
+.prose code { font-family: var(--mono); font-size: .88em; background: var(--code-bg); border: 1px solid var(--line); border-radius: 4px; padding: .1em .35em; }
+.prose pre { font-size: .86rem; line-height: 1.7; padding: 14px 16px; border: 1px solid var(--line); border-radius: 6px; overflow-x: auto; background: var(--code-bg) !important; }
+.prose pre code { border: 0; padding: 0; background: none; font-size: inherit; }
+.prose table { border-collapse: collapse; display: block; overflow-x: auto; font-size: .92rem; }
+.prose th, .prose td { border: 1px solid var(--line); padding: 6px 10px; text-align: left; vertical-align: top; }
+.prose th { background: var(--chip); font-weight: 500; }
+.prose .katex-display { overflow-x: auto; overflow-y: hidden; }

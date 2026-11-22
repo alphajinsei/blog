@@ -1,0 +1,26 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostRows from '../../components/PostRows.astro';
+import { getPosts, type Post } from '../../lib/posts';
+import { DOMAINS, domainOf } from '../../lib/tags';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  const tags = [...new Set(posts.flatMap((p) => p.data.tags))];
+  return tags.map((tag) => ({
+    params: { tag },
+    props: { tag, posts: posts.filter((p) => p.data.tags.includes(tag)) },
+  }));
+}
+
+interface Props { tag: string; posts: Post[] }
+const { tag, posts } = Astro.props;
+const domain = DOMAINS[domainOf(tag)];
+---
+
+<Base title={tag} nav="tags">
+  <h1 class="page-title"><span class="tag" style={`--dot:${domain.color};font-size:1rem;padding:7px 11px 7px 10px`}>{tag}</span></h1>
+  <p class="section-label">{domain.label} ・ {posts.length}本</p>
+  <PostRows posts={posts} fullDate />
+  <p class="more"><a href="/tags/">すべてのタグ</a></p>
+</Base>

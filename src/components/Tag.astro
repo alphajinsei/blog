@@ -1,0 +1,9 @@
+---
+import { DOMAINS, domainOf } from '../lib/tags';
+import { tagUrl } from '../lib/posts';
+
+interface Props { tag: string; count?: number }
+const { tag, count } = Astro.props;
+const color = DOMAINS[domainOf(tag)].color;
+---
+<a class="tag" href={tagUrl(tag)} style={`--dot:${color}`}>{tag}{count !== undefined && <span class="n">{count}</span>}</a>

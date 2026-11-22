@@ -1,0 +1,16 @@
+---
+// 記事を1本ランダムに選んで移動する。静的サイトなので、選ぶのはブラウザ側。
+import Base from '../layouts/Base.astro';
+import { getPosts, postUrl } from '../lib/posts';
+
+const urls = (await getPosts()).map(postUrl);
+---
+
+<Base title="ランダム">
+  {urls.length === 0
+    ? <p class="empty">まだ記事がありません。</p>
+    : <p class="empty">記事を選んでいます…</p>}
+  <script is:inline define:vars={{ urls }}>
+    if (urls.length) location.replace(urls[Math.floor(Math.random() * urls.length)]);
+  </script>
+</Base>

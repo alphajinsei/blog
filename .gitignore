@@ -1,0 +1,16 @@
+# build output
+dist/
+# dependencies
+node_modules/
+# generated types
+.astro/
+# environment
+.env
+.env.production
+# macOS / Windows
+.DS_Store
+Thumbs.db
+# 表示確認の作業用
+screenshot/
+# 表示確認用のダミー記事（Claude が作ったもの。公開しない）
+src/content/posts/zz-sample-*

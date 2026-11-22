@@ -1,0 +1,19 @@
+---
+// 記事の1行（日付・タイトル・タグ）を並べる。トップ・タグ・月別で共通。
+import Tag from './Tag.astro';
+import { md, ymd, postUrl, type Post } from '../lib/posts';
+
+interface Props { posts: Post[]; fullDate?: boolean }
+const { posts, fullDate = false } = Astro.props;
+---
+<ul class="rows">
+  {posts.map((post) => (
+    <li class:list={['row', { wide: fullDate }]}>
+      <time class="date" datetime={ymd(post.data.date)}>{fullDate ? ymd(post.data.date) : md(post.data.date)}</time>
+      <a class="t" href={postUrl(post)}>{post.data.title}</a>
+      {post.data.tags.length > 0 && (
+        <span class="tags">{post.data.tags.map((t) => <Tag tag={t} />)}</span>
+      )}
+    </li>
+  ))}
+</ul>

@@ -1,0 +1,221 @@
+<title>blog デザイン案</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap">
+<style>
+/* Layout: decisions → theme picker → the chosen top page (index) and article page, both painted by the picked theme */
+:root {
+  --bg: #f4f5f7; --surface: #ffffff; --fg: #17191d; --sub: #50565f; --faint: #868c96; --line: #dcdfe4;
+  --sans: "Noto Sans JP", "Hiragino Sans", "Yu Gothic", sans-serif;
+
+  /* blog mock: theme tokens, overwritten by the picker (default = 鉛) */
+  --m-bg: #f1f3f5; --m-fg: #1c2027; --m-sub: #586069; --m-line: #dde1e6; --m-accent: #2c4f86; --m-chip: #ffffff;
+  --t-ai: #2f5fc0; --t-sys: #137257; --t-math: #6844ae; --t-soc: #8a5d05;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #131518; --surface: #1b1e22; --fg: #e6e8eb; --sub: #a4aab3; --faint: #737a85; --line: #2b2f36; color-scheme: dark;
+}}
+:root[data-theme="dark"] { --bg: #131518; --surface: #1b1e22; --fg: #e6e8eb; --sub: #a4aab3; --faint: #737a85; --line: #2b2f36; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 15px; line-height: 1.8;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 40px 80px;
+}
+.wrap { max-width: 1000px; margin: 0 auto; display: grid; gap: 44px; }
+h1, h2, h3 { margin: 0; text-wrap: balance; }
+p { margin: 0; }
+
+.intro { display: grid; gap: 14px; max-width: 46em; }
+.intro h1 { font-size: 1.55rem; font-weight: 700; }
+.lead { color: var(--sub); }
+.decided { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.decided li { font-size: .85rem; padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); }
+
+.picker { display: grid; gap: 14px; }
+.picker h2 { font-size: 1.2rem; }
+.themes { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+@media (max-width: 760px) { .themes { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.theme {
+  font: inherit; color: var(--fg); text-align: left; cursor: pointer;
+  display: grid; gap: 8px; padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface);
+}
+.theme[aria-pressed="true"] { border-color: var(--fg); box-shadow: 0 0 0 1px var(--fg); }
+.theme:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
+.sw { display: flex; height: 34px; border-radius: 5px; overflow: hidden; border: 1px solid var(--line); }
+.sw i { flex: 1; }
+.sw i:first-child { flex: 4; }
+.theme b { font-size: .95rem; }
+.theme b small { font-weight: 400; color: var(--faint); margin-left: 6px; font-size: .78rem; }
+.theme span { font-size: .82rem; color: var(--sub); line-height: 1.6; }
+.why { color: var(--sub); max-width: 46em; min-height: 3.6em; }
+
+.cap { font-size: .78rem; color: var(--faint); letter-spacing: .08em; margin-bottom: 6px; }
+.frame { border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--m-bg); }
+
+/* ---------- blog mock ---------- */
+.m { background: var(--m-bg); color: var(--m-fg); font-family: var(--sans); font-size: 16px; line-height: 1.9; transition: background-color .2s; }
+@media (prefers-reduced-motion: reduce) { .m { transition: none; } }
+.m-top { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 20px; padding: 18px 28px; border-bottom: 1px solid var(--m-line); }
+.m-top .name { font-weight: 700; font-size: 1.05rem; color: var(--m-accent); }
+.m-top nav { display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: .86rem; color: var(--m-sub); }
+.m-inner { padding: 26px 28px 34px; }
+@media (max-width: 560px) { .m-top, .m-inner { padding-left: 18px; padding-right: 18px; } }
+.m-h { font-size: .8rem; font-weight: 500; color: var(--m-sub); letter-spacing: .06em; margin-bottom: 10px; }
+.date { font-size: .8rem; color: var(--m-sub); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag { font-size: .74rem; line-height: 1; padding: 5px 8px 5px 7px; border-radius: 4px; white-space: nowrap; background: var(--m-chip); color: var(--m-fg); display: inline-flex; align-items: center; gap: 5px; border: 1px solid var(--m-line); }
+.tag::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--c); }
+.tag em { font-style: normal; color: var(--m-sub); font-variant-numeric: tabular-nums; }
+.ai { --c: var(--t-ai); } .sys { --c: var(--t-sys); } .math { --c: var(--t-math); } .soc { --c: var(--t-soc); }
+
+.idx .m-inner { max-width: 800px; margin: 0 auto; display: grid; gap: 22px; }
+.idx .year h4 { margin: 0 0 4px; font-size: .95rem; font-weight: 700; }
+.idx .row { display: grid; grid-template-columns: 3.4em minmax(0, 1fr) auto; align-items: center; gap: 4px 16px; padding-block: 9px; border-top: 1px solid var(--m-line); }
+.idx .row .t { font-size: .98rem; font-weight: 500; line-height: 1.55; }
+@media (max-width: 620px) { .idx .row { grid-template-columns: 3.4em minmax(0, 1fr); } .idx .row .tags { grid-column: 2; } }
+
+.art .m-inner { max-width: 720px; margin: 0 auto; display: grid; gap: 22px; }
+.art h3 { font-size: 1.6rem; font-weight: 700; line-height: 1.45; }
+.art .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; }
+.art .body { display: grid; gap: 1.2em; font-size: 1.02rem; line-height: 2; }
+.art .body h4 { margin: .6em 0 0; font-size: 1.15rem; font-weight: 700; }
+.art .body ul { margin: 0; padding-left: 1.3em; display: grid; gap: .2em; }
+.art .body a, .art .rel a, .art .hist a { color: var(--m-accent); }
+.art .after { display: grid; gap: 14px; border-top: 1px solid var(--m-line); padding-top: 18px; }
+.art .rel { display: grid; gap: 6px; font-size: .92rem; }
+.art .rel a { text-decoration: none; }
+.art .hist { font-size: .84rem; color: var(--m-sub); }
+
+.next { display: grid; gap: 10px; max-width: 46em; border-top: 1px solid var(--line); padding-top: 22px; }
+.next h2 { font-size: 1.1rem; }
+.next ul { margin: 0; padding-left: 1.2em; color: var(--sub); display: grid; gap: 4px; }
+</style>
+
+<div class="wrap">
+
+<section class="intro">
+  <h1>blog のデザイン案（3回目：テーマの色）</h1>
+  <p class="lead">トップは年ごとの索引、本文はゴシック、ダークモードなしに決まりました。残るのはテーマの色です。真っ白をやめて、背景にごく薄く色を入れた4案を用意しました。下のボタンで切り替えると、トップと記事ページの両方に反映されます。</p>
+  <ul class="decided"><li>トップ：年ごとの索引</li><li>本文：ゴシック</li><li>ダークモード：なし</li><li>色の付くもの：背景・サイト名とリンク・分野タグ</li></ul>
+</section>
+
+<section class="picker">
+  <h2>テーマの色</h2>
+  <div class="themes" role="group" aria-label="テーマの色">
+    <button type="button" class="theme" id="th-namari" data-theme-key="namari" aria-pressed="true">
+      <div class="sw"><i style="background:#f1f3f5"></i><i style="background:#2c4f86"></i></div>
+      <b>鉛<small>なまり</small></b><span>青みのある薄い灰色に、藍のアクセント</span>
+    </button>
+    <button type="button" class="theme" id="th-seiji" data-theme-key="seiji" aria-pressed="false">
+      <div class="sw"><i style="background:#eef3f0"></i><i style="background:#2d6a55"></i></div>
+      <b>青磁<small>せいじ</small></b><span>ごく薄い緑がかった灰色に、深い緑</span>
+    </button>
+    <button type="button" class="theme" id="th-sunairo" data-theme-key="sunairo" aria-pressed="false">
+      <div class="sw"><i style="background:#f4f2ee"></i><i style="background:#3b5a72"></i></div>
+      <b>砂<small>すな</small></b><span>黄みを抑えた温かい灰色に、青灰のアクセント</span>
+    </button>
+    <button type="button" class="theme" id="th-fuji" data-theme-key="fuji" aria-pressed="false">
+      <div class="sw"><i style="background:#f3f2f7"></i><i style="background:#56478a"></i></div>
+      <b>藤鼠<small>ふじねず</small></b><span>ほんのり紫の灰色に、落ち着いた紫</span>
+    </button>
+  </div>
+  <p class="why" id="why"></p>
+</section>
+
+<div>
+  <div class="cap">トップページ（年ごとの索引）</div>
+  <div class="frame"><div class="m idx">
+    <div class="m-top"><span class="name">blog.alphajinsei.com</span><nav><span>タグ</span><span>月別</span><span>ランダム</span><span>RSS</span></nav></div>
+    <div class="m-inner">
+      <div><div class="m-h">最近のタグ</div><div class="tags" data-tags></div></div>
+      <div class="year"><h4>2026</h4><div data-rows></div></div>
+    </div>
+  </div></div>
+</div>
+
+<div>
+  <div class="cap">記事ページ</div>
+  <div class="frame"><div class="m art">
+    <div class="m-top"><span class="name">blog.alphajinsei.com</span><nav><span>タグ</span><span>月別</span><span>ランダム</span><span>RSS</span></nav></div>
+    <div class="m-inner">
+      <div style="display:grid;gap:12px">
+        <h3>自分の手で書くということ</h3>
+        <div class="meta"><span class="date">2026-11-20 ・ 更新 2026-11-22</span><span class="tags"><span class="tag ai">AI</span><span class="tag soc">発信</span></span></div>
+      </div>
+      <div class="body">
+        <p>自分の手で書いて、私自身の思想を残すことを意識しています。特に今ai全盛時代で、文章をいくらでも生成することができる時代においては、個人で書いた文章自体が重要になってくると思っているからです。</p>
+        <p>また、私は、自分では「独自のバックグラウンドから、独自の深い思想を持つ」人間だと思っており、これらの思想を表に出すことが価値があると思ったからです。</p>
+        <h4>再利用可能な部品にするということ</h4>
+        <ul>
+          <li>認証のapi開発者が<a href="#">qiita</a>に書いていた話</li>
+          <li>リソース集計で毎回にたような関数を作ることになる件</li>
+          <li>インフラも再利用可能な部品にしたい。claudeのskill的な</li>
+          <li>仕様を公開することが大事。実装はしらなくても、仕様は外だしする。</li>
+        </ul>
+        <p>そのほか、私自身が口下手で、考えている内容をすべて口頭で言い尽くすことが難しいので、代わりに文章で表現して、気に留めてくれた人がいればそれを題材に会話したい、という思いがあります。</p>
+      </div>
+      <div class="after">
+        <div class="rel"><div class="m-h" style="margin:0">関連する記事（共通のタグが多い順）</div><a href="#">AIが触れる形に整える</a><a href="#">ドメイン知識を集めた者が強い</a></div>
+        <p class="hist">この記事は2回書き直しています。<a href="#">変更の履歴を GitHub で見る</a></p>
+      </div>
+    </div>
+  </div></div>
+</div>
+
+<section class="next">
+  <h2>メモ</h2>
+  <ul>
+    <li>分野タグは、背景に色が付いたので、白い小札に色の点を付ける形に変えました。文字は濃いまま、色は点だけです。</li>
+    <li>背景を薄くしても、本文の文字との差（コントラスト）はどの案も十分に取っています。</li>
+    <li>サイト名はまだ仮（blog.alphajinsei.com）のままです。</li>
+  </ul>
+</section>
+
+</div>
+
+<script>
+const THEMES = {
+  namari:  { bg:"#f1f3f5", fg:"#1c2027", sub:"#586069", line:"#dde1e6", accent:"#2c4f86", chip:"#ffffff",
+    why:"いちばん癖のない案です。最近のアーティファクトの灰色に近く、portfolio（alphajinsei.com）の青とも並びがそろいます。技術と思想を行き来する文章に、硬すぎず冷たすぎない色です。" },
+  seiji:   { bg:"#eef3f0", fg:"#1a221e", sub:"#56625b", line:"#d7e1db", accent:"#2d6a55", chip:"#ffffff",
+    why:"白より眩しさが抑えられ、色味としてもいちばん穏やかです。ほかの自分のサイト（青・橙）と被らないので、「ここは別の場所」という顔がいちばんはっきりします。" },
+  sunairo: { bg:"#f4f2ee", fg:"#221f1b", sub:"#5f5a52", line:"#e2ded6", accent:"#3b5a72", chip:"#ffffff",
+    why:"紙に近い温かさがあります。ただ dia-logos や Anthropic の薄い橙〜茶に近づくので、黄みは抑え、アクセントは青灰にして区別しています。" },
+  fuji:    { bg:"#f3f2f7", fg:"#1e1d25", sub:"#5c5a68", line:"#e0dee8", accent:"#56478a", chip:"#ffffff",
+    why:"いちばん個性が出る案です。静かですが、一目で覚えてもらえる色です。数理のタグの紫と近いので、タグの色の配分は調整が要ります。" },
+};
+const POSTS = [
+  ["2026-11-18", "再利用可能な部品にするということ", [["sys","部品化"],["sys","インフラ"],["ai","skill"]]],
+  ["2026-11-09", "AIが触れる形に整える", [["ai","AI"],["sys","CLI"]]],
+  ["2026-10-30", "テストで「何をしてもいいか」を定義する", [["sys","テスト"],["sys","設計"]]],
+  ["2026-10-21", "暗号に感じる、数学っぽい抽象化", [["math","暗号"],["math","抽象化"]]],
+  ["2026-10-12", "ドメイン知識を集めた者が強い", [["soc","ドメイン知識"],["ai","AI"]]],
+  ["2026-09-28", "指摘の射影から skill をかたどる", [["ai","skill"],["math","射影"]]],
+  ["2026-09-15", "特化と汎用のあいだ", [["soc","ドメイン知識"],["ai","skill"]]],
+];
+const RECENT = [["ai","skill",3],["ai","AI",2],["soc","ドメイン知識",2],["sys","部品化",1],["math","暗号",1],["sys","テスト",1]];
+const tag = ([c, n, k]) => `<span class="tag ${c}">${n}${k ? `<em>${k}</em>` : ""}</span>`;
+document.querySelectorAll("[data-tags]").forEach(el => { el.innerHTML = RECENT.map(tag).join(""); });
+document.querySelectorAll("[data-rows]").forEach(el => {
+  el.innerHTML = POSTS.map(([d, t, ts]) =>
+    `<div class="row"><span class="date">${d.slice(5).replace("-", ".")}</span><span class="t">${t}</span><span class="tags">${ts.map(tag).join("")}</span></div>`).join("");
+});
+
+const root = document.documentElement, why = document.getElementById("why");
+const buttons = document.querySelectorAll("[data-theme-key]");
+function apply(key) {
+  const t = THEMES[key];
+  for (const k of ["bg","fg","sub","line","accent","chip"]) root.style.setProperty(`--m-${k}`, t[k]);
+  why.textContent = t.why;
+  buttons.forEach(b => b.setAttribute("aria-pressed", String(b.dataset.themeKey === key)));
+  try { localStorage.setItem("blog-theme", key); } catch (e) {}
+}
+buttons.forEach(b => b.addEventListener("click", () => apply(b.dataset.themeKey)));
+let start = "namari";
+try { const s = localStorage.getItem("blog-theme"); if (s && THEMES[s]) start = s; } catch (e) {}
+apply(start);
+</script>

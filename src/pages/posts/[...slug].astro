@@ -1,0 +1,44 @@
+---
+import Base from '../../layouts/Base.astro';
+import Tag from '../../components/Tag.astro';
+import { getPosts, ymd, describe, related, postUrl, historyUrl, type Post } from '../../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => ({ params: { slug: post.slug }, props: { post, all: posts } }));
+}
+
+interface Props { post: Post; all: Post[] }
+const { post, all } = Astro.props;
+const { Content } = await post.render();
+const rel = related(post, all);
+---
+
+<Base title={post.data.title} description={describe(post)} type="article">
+  <article class="post">
+    <header class="post-head">
+      <h1>{post.data.title}</h1>
+      <div class="post-meta">
+        <span class="date">
+          <time datetime={ymd(post.data.date)}>{ymd(post.data.date)}</time>
+          {post.data.updated && <> ・ 更新 <time datetime={ymd(post.data.updated)}>{ymd(post.data.updated)}</time></>}
+        </span>
+        {post.data.tags.length > 0 && <span class="tags">{post.data.tags.map((t) => <Tag tag={t} />)}</span>}
+      </div>
+    </header>
+
+    <div class="prose">
+      <Content />
+    </div>
+
+    <footer class="post-after">
+      {rel.length > 0 && (
+        <nav class="related" aria-label="関連する記事">
+          <h2 class="section-label">関連する記事</h2>
+          {rel.map((p) => <a href={postUrl(p)}>{p.data.title}</a>)}
+        </nav>
+      )}
+      <p class="history"><a href={historyUrl(post)}>この記事の変更の履歴（GitHub）</a></p>
+    </footer>
+  </article>
+</Base>
