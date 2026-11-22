@@ -1,6 +1,6 @@
 # blog — 自分の手で書いた文章を置くブログ
 
-`https://blog.alphajinsei.com`（未公開）。要件の原文と決定事項は [requirement.md](requirement.md)。
+`https://blog.alphajinsei.com`（2026-11-23 公開）。要件の原文と決定事項は [requirement.md](requirement.md)。
 
 ## これは何か
 
@@ -60,9 +60,13 @@
 3. ~~Astro の土台~~（2026-11-22）
 4. ~~「最初に入れる」機能~~（2026-11-22。Web Analytics は Pages のダッシュボードで有効にする）
 5. ~~手元で表示確認~~（2026-11-22）← 表示確認用のダミー記事 `src/content/posts/zz-sample-*` は .gitignore 済み。最初の記事が書けたら消す
-6. GitHub のリポジトリ作成（確認を取ってから）と Pages の接続（手順は README） ← 次
-7. portfolio への掲載（[portfolio/README.md](../portfolio/README.md) の手順）
+6. ~~GitHub のリポジトリ作成と Pages の接続~~（2026-11-23）。Web Analytics の計測タグが入っているかは、最初の記事の公開後に確かめる
+7. ~~portfolio への掲載~~（2026-11-23、グループ「01 自分の手で書く」を新設して先頭に）
+8. 最初の記事 ← 次（ユーザーが書く）
 
 ## 作業メモ
+
+- コミットの作者は `alphajinsei <alphajinsei@alphajinsei.com>`（このリポジトリの git config に設定済み）。
+- タグの色は分野ごと。使う色は src/lib/tags.ts の `PALETTE` の6色に限る。
 
 - Node のコマンドは `bash -ic '...'` で実行する（nvm が非対話シェルで読まれないため）。
