@@ -1,7 +1,7 @@
 ---
 title: dario amodei のエッセイを読む①(machines-of-loving-grace)
 date: 2026-11-23
-tags: []
+tags: [AI, LLM, 生物学, 神経科学]
 ---
 
 # はじめに
