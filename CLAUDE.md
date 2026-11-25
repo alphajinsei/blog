@@ -28,14 +28,14 @@
 
 - Astro（SSG）で自作。dia-logos を土台にする（記事一覧・タグ・RSS は dia-logos から流用）。
 - ホスティングは **⓪ Cloudflare Pages + GitHub 連携**。main に push するとCloudflare がビルドして公開する。手元から `wrangler deploy` / `wrangler pages deploy` を混ぜない（デプロイの経路は push の1本）。
-- 記事は `src/content/posts/*.md`。DB は持たない。バックアップは GitHub（公開リポジトリ）に全履歴があることで担保する。
+- 記事は `src/content/posts/*.md`。ネタ帳は `drafts/ideas.md`、書きかけは `drafts/*.md`（どちらも git に入れない。Claude は本文を書かない）。DB は持たない。バックアップは GitHub（公開リポジトリ）に全履歴があることで担保する。
 
 ### infra の方針からの例外
 
 [サービス開発ガイド](../infra/docs/service-guide.md) では「⓪は新しいサービスに使わず、静的サイトは①（`npm run deploy`）」と決めているが、このブログは**あえて⓪にした**（2026-11-20）。
 
 - 理由：push で公開と保管が一度に済み、本番と GitHub の中身が常にそろう。中身は Markdown だけで、push して壊れる変更がほぼない。
-- 受け入れたこと：書きかけの記事は push しない限り手元にしかない（消えうる）。push した書きかけは GitHub 上で読める。そのため下書き機能は作らない。
+- 受け入れたこと：書きかけの記事は手元にしかない（消えうる）。ネタ帳と下書きは `drafts/`（.gitignore 済み）に置く。消えると困るようになったら、リポジトリを非公開にして `drafts/` も git に入れる（2026-11-23 に相談）。
 - Pages と GitHub の接続はダッシュボードでの手作業（Claude は代わりにできない）。
 
 ## 機能

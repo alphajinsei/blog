@@ -14,3 +14,5 @@ Thumbs.db
 screenshot/
 # 表示確認用のダミー記事（Claude が作ったもの。公開しない）
 src/content/posts/zz-sample-*
+# ネタ帳と書きかけの記事（公開しない・git にも入れない）
+drafts/

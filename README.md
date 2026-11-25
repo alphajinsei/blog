@@ -4,6 +4,18 @@ https://blog.alphajinsei.com ― 自分の手で書いた文章を置くブロ�
 
 ## 記事を書いて公開する
 
+ネタ → 下書き → 公開、の3段で進める。
+
+| 段 | 置き場所 | 公開されるか |
+|---|---|---|
+| ネタ | `drafts/ideas.md` に1行ずつ足す | されない（`drafts/` は git に入れない） |
+| 下書き | `drafts/<スラッグ>.md`（`drafts/_template.md` をコピー） | されない |
+| 公開 | `src/content/posts/` に移して push | される |
+
+`drafts/` は手元の PC にしかない（GitHub にも残らない）。消えると困るほど溜まってきたら、リポジトリを非公開にして `drafts/` も git に入れる（Pages の GitHub 連携は非公開のリポジトリでも動く）。
+
+記事のファイルの書き方：
+
 1. `src/content/posts/` に Markdown のファイルを作る。ファイル名がそのまま URL になる（`2026-11-22-hand-written.md` → `/posts/2026-11-22-hand-written/`）。英小文字・数字・ハイフンにしておくと無難。
 
    ```markdown
@@ -24,7 +36,7 @@ https://blog.alphajinsei.com ― 自分の手で書いた文章を置くブロ�
 - トップの索引にはタイトルとタグしか出ないので、タイトルは中身が分かる短文にするとよい。
 - 数式は `$...$`（行内）と `$$...$$`（別行）で書ける。
 - 画像は `public/images/` に置いて `![説明](/images/xxx.png)` で参照する。
-- 書きかけは push しない（push ＝ 公開。下書きの機能はない）。
+- `src/content/posts/` に置いたものは、push すればすべて公開される。プレビューのために移した書きかけは、仕上げて公開するか `drafts/` に戻す。
 
 ## タグの色（分野）
 
